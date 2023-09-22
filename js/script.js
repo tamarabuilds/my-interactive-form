@@ -10,6 +10,14 @@ const nameInput = document.querySelector('#name')
 const emailInput = document.querySelector('#email')
 nameInput.focus()
 
+nameInput.addEventListener('keyup', ()=> {
+    isNameValid() ? validField(nameInput) : errorField(nameInput)
+})
+
+emailInput.addEventListener('keyup', ()=> {
+    isEmailValid() ? validField(emailInput) : errorField(emailInput)
+})
+
 const otherJobRole = document.querySelector('#other-job-role')
 otherJobRole.style.display = 'none'
 
@@ -47,7 +55,6 @@ designInput.addEventListener('change', (e)=> {
             if (selectedToBeSet){
                 colorInput[i].setAttribute('selected', true)  
                 selectedToBeSet = false
-                console.log(`selected option: ${colorInput[i]}`)
             } else {
                 colorInput[i].removeAttribute('selected')  
             }
@@ -146,7 +153,7 @@ Visual validation added with hints
 const form = document.querySelector('form')
 const isNameValid = () => Boolean(nameInput.value)
 const isEmailValid = () => {
-    return /^\w+@\w+\.\w+$/.test(emailInput.value)
+    return /^(\w+)(@)(\w+)(\.)(\w+)$/.test(emailInput.value)
 }
 const ccNum = document.querySelector('#cc-num')
 const ccZip = document.querySelector('#zip')
@@ -185,8 +192,6 @@ function validField(resolvedElement){
 }
 
 form.addEventListener('submit', (e)=> {
-    console.log(`preventing submission upfront...`)
-    e.preventDefault()
 
     if (isNameValid()){
         validField(nameInput)
@@ -209,24 +214,30 @@ form.addEventListener('submit', (e)=> {
         errorField(document.querySelector('#activities-box'))
     }
 
-    if (isCCNumValid()){
-        validField(ccNum)
-    } else {
-        e.preventDefault()
-        errorField(ccNum)
+    if (paymentType.value === 'credit-card'){
+        if (isCCNumValid()){
+            validField(ccNum)
+        } else {
+            e.preventDefault()
+            errorField(ccNum)
+        }
+    
+        if (isZipValid()){
+            validField(ccZip)
+        } else {
+            e.preventDefault()
+            errorField(ccZip)
+        }
+         
+        if (isCVVValid()){
+            validField(ccCVV)
+        } else {
+            e.preventDefault()
+            errorField(ccCVV)
+        } 
     }
 
-    if (isZipValid()){
-        validField(ccZip)
-    } else {
-        e.preventDefault()
-        errorField(ccZip)
-    }
-     
-    if (isCVVValid()){
-        validField(ccCVV)
-    } else {
-        e.preventDefault()
-        errorField(ccCVV)
-    } 
+    
+    console.log(`preventing submission to not get error`)
+    e.preventDefault()
 })
