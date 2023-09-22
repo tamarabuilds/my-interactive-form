@@ -24,10 +24,10 @@ The following form validation is also in place:
 * Real-time error messages are displayed on the name and email fields
 * Conditional error messages are displayed on the email field
 * The following fields are required prior to submitting:
-* Name must not be blank
-* Email must be correctly formatted
-* Activities must have at least 1 selection
-* If credit card is the payment method, the number, zip and cvv code are required
+  * Name must not be blank
+  * Email must be correctly formatted
+  * Activities must have at least 1 selection
+  * If credit card is the payment method, the number, zip and cvv code are required
 
 ## Contributing
 
