@@ -1,19 +1,25 @@
 // ***** BASIC INFO ***** //
 
-/*
-start user with focus on the name field
-initialize form with the 'other-job-role' field hidden, then show if "Other" is selected in job-role drop down
-listen for changes on job role title selection and hide/show other-job-role text field based on the option selected
-*/
+/**
+ * start user with focus on the name field
+ * initialize form with the 'other-job-role' field hidden, then show if "Other" is selected in job-role drop down
+ * listen for changes on job role title selection and hide/show other-job-role text field based on the option selected
+ */
 
 const nameInput = document.querySelector('#name')
 const emailInput = document.querySelector('#email')
 nameInput.focus()
 
+/**
+ * @event
+ */
 nameInput.addEventListener('keyup', ()=> {
     isNameValid() ? validField(nameInput) : errorField(nameInput)
 })
 
+/**
+ * @event
+ */
 emailInput.addEventListener('keyup', ()=> {
     isEmailValid() ? validField(emailInput) : errorField(emailInput)
 })
@@ -44,6 +50,9 @@ listen for changes on the 'design' select element and
 (3) ensure colors align with selected 'design'
 */
 
+/**
+ * @event
+ */
 const designInput = document.querySelector('#design')
 designInput.addEventListener('change', (e)=> {
     colorInput.style.display = 'block'
