@@ -71,6 +71,8 @@ designInput.addEventListener('change', (e)=> {
 /* 
 'activity-cost' paragraph to update total cost based on event listener on 'activites' fieldset checkbox inputs. 
 Increase/decrease amount by data-cost of each checked/unchecked element.
+
+Added validation if any activities conflict, similarly timed events are disabled
 */
 
 const activites = document.querySelector('#activities')
@@ -78,6 +80,25 @@ const cost = document.querySelector('#activities-cost')
 const activityCheckboxes = document.querySelectorAll("input[type='checkbox']")
 let isAnActivitySelected = false
 activites.addEventListener('change', (e)=>{
+    const selectedTimes = []
+    activityCheckboxes.forEach( (element) => {
+        element.checked ? selectedTimes.push(element.dataset.dayAndTime): ''    
+    })
+    console.log(selectedTimes)
+
+    // Thanks @Liz T for reminding me about .includes
+    for (let j = 0; j < activityCheckboxes.length; j++){
+        if ( !activityCheckboxes[j].checked) { 
+           if (selectedTimes.includes(activityCheckboxes[j].dataset.dayAndTime)){
+                activityCheckboxes[j].setAttribute('disabled', true)
+                activityCheckboxes[j].parentElement.classList.add('disabled')
+           } else {
+                activityCheckboxes[j].closest('label').classList.remove('disabled')
+                activityCheckboxes[j].removeAttribute('disabled')            
+           }
+        }
+    }
+
     let runningSum = 0
     isAnActivitySelected = false
     for (let i = 0; i < activityCheckboxes.length; i++){
@@ -88,6 +109,8 @@ activites.addEventListener('change', (e)=>{
     }
     cost.innerText = `Total: $${runningSum}`
 })
+
+
 
 /*
 Added visible focus states to more easily navigate via keyboard.
@@ -147,13 +170,32 @@ Required fields to be validated with the following helper functions:
         (a) card-number must contain 13-16 digits, no dashes/spaces
         (b) zip must be 5 digit number
         (c) CVV must be 3 digit number
+
 Visual validation added with hints
 */ 
 
 const form = document.querySelector('form')
 const isNameValid = () => Boolean(nameInput.value)
 const isEmailValid = () => {
-    return /^(\w+)(@)(\w+)(\.)(\w+)$/.test(emailInput.value)
+    emailInput.parentElement.lastElementChild.innerText = "Email address must be formatted correctly"
+    const regex = /^(\w+)(@)(\w+)(\.)(\w+)$/ 
+    if (regex.test(emailInput.value)){
+        return true
+    } else if ( /^(\w+)(@)(\w+)(\.)$/.test(emailInput.value) ){
+        errorField(emailInput, 'Email must include a domain after the dot (.)')
+    } else if ( /^(\w+)(@)(\w+)$/.test(emailInput.value)){
+        errorField(emailInput, 'Email must end in a domain including a dot (.)')                
+    } else if ( /^(\w+)(@)$/.test(emailInput.value)){
+        errorField(emailInput, 'Email must include something after the @')                
+    } else if ( /^(\w+)$/.test(emailInput.value)){
+        errorField(emailInput, 'Email must include @ and a dot (.)')                
+    } else if ( /^(@)$/.test(emailInput.value)){
+        errorField(emailInput, 'Email must include a prefix before the @')                               
+    } else if ( /[^\w\d@\.]+/.test(emailInput.value)){
+        errorField(emailInput, 'Only include letters, numbers, @ and dot (.)')                               
+    } 
+        
+    return
 }
 const ccNum = document.querySelector('#cc-num')
 const ccZip = document.querySelector('#zip')
@@ -177,11 +219,14 @@ const isCreditCardValid = () =>{
             paymentType.value === 'paypal'
 }
 
-function errorField(errorElement){
+function errorField(errorElement, errorHint = null){
     const parentOfError = errorElement.parentElement
     parentOfError.classList.add('not-valid')
     parentOfError.classList.remove('valid')
     parentOfError.lastElementChild.style.display = 'block'
+    if (errorHint){
+        parentOfError.lastElementChild.innerText = errorHint
+    }
 }
 
 function validField(resolvedElement){
@@ -238,6 +283,6 @@ form.addEventListener('submit', (e)=> {
     }
 
     
-    console.log(`preventing submission to not get error`)
+    console.log(`preventing submission to not get an error`)
     e.preventDefault()
 })
