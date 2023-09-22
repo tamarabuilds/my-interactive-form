@@ -1,6 +1,7 @@
 # my-interactive-form
 Unit 03 project for the Full Stack JavaScript Techdegree. This form uses JavaScript to enhance an interactive registration form for a fictional Full Stack conference.
 
+![Screenshot 2023-09-22 at 11 23 31 AM](https://github.com/tamarabuilds/my-interactive-form/assets/98510821/0cb7e23f-54cb-444b-9b5d-2624263a0d59)
 
 
 ## Installation
