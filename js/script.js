@@ -10,16 +10,10 @@ const nameInput = document.querySelector('#name')
 const emailInput = document.querySelector('#email')
 nameInput.focus()
 
-/**
- * @event
- */
 nameInput.addEventListener('keyup', ()=> {
     isNameValid() ? validField(nameInput) : errorField(nameInput)
 })
 
-/**
- * @event
- */
 emailInput.addEventListener('keyup', ()=> {
     isEmailValid() ? validField(emailInput) : errorField(emailInput)
 })
@@ -42,7 +36,7 @@ titleInput.addEventListener('change', (e)=> {
 // initially, disable the 'color' select element
 const colorInput = document.querySelector('#color')
 const colorOptions = colorInput.querySelectorAll('option')
-colorInput.style.display = 'none'
+colorInput.setAttribute('disabled', true)
 
 /*
 listen for changes on the 'design' select element and 
@@ -50,12 +44,9 @@ listen for changes on the 'design' select element and
 (3) ensure colors align with selected 'design'
 */
 
-/**
- * @event
- */
 const designInput = document.querySelector('#design')
 designInput.addEventListener('change', (e)=> {
-    colorInput.style.display = 'block'
+    colorInput.removeAttribute('disabled')
     let selectedToBeSet = true
     for (let i = 0; i < colorInput.length; i++){
         if (colorInput[i].dataset.theme === designInput.value){
@@ -290,8 +281,4 @@ form.addEventListener('submit', (e)=> {
             errorField(ccCVV)
         } 
     }
-
-    
-    console.log(`preventing submission to not get an error`)
-    e.preventDefault()
 })
